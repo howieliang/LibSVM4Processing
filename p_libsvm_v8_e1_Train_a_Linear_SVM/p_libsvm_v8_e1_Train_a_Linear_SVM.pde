@@ -11,6 +11,7 @@
 
 double C = 64;
 double gamma = 1.;
+int d = 2; //feature number
 
 void setup() {
   size(500, 640);
@@ -20,10 +21,10 @@ void draw() {
   background(255);
   if (!svmTrained && firstTrained) {
     //train a linear support vector classifier (SVC) 
-    trainLinearSVC(C);
+    trainLinearSVC(d, C);
   }
   //draw the SVM
-  if (featureNum == 2) drawSVM();
+  if (d == 2) drawSVM();
 
   if (svmTrained) { 
     //form a test data
