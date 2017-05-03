@@ -1,0 +1,8 @@
+Confusion Matrix:
+	[0]	[1]	[2]	Total	
+[0]	17	0	0	17	
+[1]	0	29	0	29	
+[2]	0	0	23	23	
+Total	17	29	23	
+correct/tested = 69/69
+correct = 100.0 %
