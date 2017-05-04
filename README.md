@@ -7,27 +7,30 @@ Without installing a library, you can perform SVM classification in processing w
 The Example is based on the original LibSVM library
 (LibSVM Website: http://www.csie.ntu.edu.tw/~cjlin/libsvm/)
 
-- Example 1. Train a Linear SVM
+- Example 0. Build your App
+A template for building an App involved support vector machine (SVM).
+
+- Example 1. Train a Linear SV Classifier
 Input: Labelled data formed by Click and Drag the mouse cursor on the canvas.
 Output: A Linear SVM model for classifying the mouse position.
 
-- Example 2. Load a Linear SVM
+- Example 2. Load a Linear SV Classifier
 Input: A SVM model.
 Output: Classifying the mouse position based on the model loaded.
 
-- Example 3. Load a CSV file
+- Example 3. Load Data from CSV (Comma-Separated Values) files
 Input: A Dataset in CSV file format.
 Output: A model for classifying the mouse position based on the model loaded.
 
-- Example 4. Load a non-CSV file
+- Example 4. Load Data from non-CSV (Comma-Separated Values) files
 Input: A Dataset in non-CSV file format.
 Output: A model for classifying the mouse position based on the model loaded.
 
-- Example 5. Train an RBF SVM
+- Example 5. Train an RBF SV Classifier
 Input: Labelled data formed by Click and Drag the mouse cursor on the canvas.
 Output: An RBF-Kernel SVM model for classifying the mouse position.
 
-- Example 6. Grid Search for SVM
+- Example 6. Grid Search (for overfitting prevention)
 Input: Labelled data formed by Click and Drag the mouse cursor on the canvas.
 Output: A Linear- or RBF-Kernel SVM model with the best parameters in grid search.
 
@@ -36,5 +39,10 @@ A Tool for generating CSV file is also provided
 Input: Labelled data formed by Click and Drag the mouse cursor on the canvas.
 Output: A CSV file contains all the mouse position with label.
 
-Also, more Data set from the LibSVM Website: http://www.csie.ntu.edu.tw/~cjlin/libsvm/
+- SVMData generator
+Input: Labelled data formed by Click and Drag the mouse cursor on the canvas.
+Output: A SVM standard file contains all the mouse position with label.
+
 - More Dataset
+More Data set from the LibSVM Website: http://www.csie.ntu.edu.tw/~cjlin/libsvm/
+
