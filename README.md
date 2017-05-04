@@ -34,7 +34,7 @@ Output: An RBF-Kernel SVM model for classifying the mouse position.
 Input: Labelled data formed by Click and Drag the mouse cursor on the canvas.
 Output: A Linear- or RBF-Kernel SVM model with the best parameters in grid search.
 
-A Tool for generating CSV file is also provided
+Tools for generating CSV file is also provided
 - CSV generator
 Input: Labelled data formed by Click and Drag the mouse cursor on the canvas.
 Output: A CSV file contains all the mouse position with label.
@@ -43,6 +43,6 @@ Output: A CSV file contains all the mouse position with label.
 Input: Labelled data formed by Click and Drag the mouse cursor on the canvas.
 Output: A SVM standard file contains all the mouse position with label.
 
-- More Dataset
-More Data set from the LibSVM Website: http://www.csie.ntu.edu.tw/~cjlin/libsvm/
+More Dataset
+- More Data set are available on the LibSVM Website: http://www.csie.ntu.edu.tw/~cjlin/libsvm/
 
