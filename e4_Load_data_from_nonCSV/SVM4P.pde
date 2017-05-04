@@ -51,11 +51,13 @@ PrintWriter output;
 void trainLinearSVR(int _featureNum, double C) {
   featureNum = _featureNum;
   svmBuffer = new PGraphics(); 
-  svm.svm_set_print_string_function(new libsvm.svm_print_interface() {
-    @Override public void print(String s) {
-    }
-  }
-  );
+  //if (!bAndroid) {
+  //  svm.svm_set_print_string_function(new libsvm.svm_print_interface() {
+  //    @Override public void print(String s) {
+  //    }
+  //  }
+  //  );
+  //}
   kernel_Type = svm_parameter.LINEAR;
   best_accuracy = runSVR_Linear(C); //Run Linear SVM and get the cross-validation accuracy;
   svmTrained = true;
@@ -74,11 +76,13 @@ void trainLinearSVC(int _featureNum, double _C, boolean updateImage, int _nr_fol
   currC = _C;
   nr_fold = _nr_fold;
   svmBuffer = new PGraphics(); 
-  svm.svm_set_print_string_function(new libsvm.svm_print_interface() {
-    @Override public void print(String s) {
-    }
-  }
-  );
+  //if (!bAndroid) {
+  //  svm.svm_set_print_string_function(new libsvm.svm_print_interface() {
+  //    @Override public void print(String s) {
+  //    }
+  //  }
+  //  );
+  //}
   kernel_Type = svm_parameter.LINEAR;
   trainTimer = millis();
   best_accuracy = runSVM_Linear(_C, updateImage, nr_fold); //Run Linear SVM and get the cross-validation accuracy
@@ -99,11 +103,13 @@ void trainRBFSVC(int _featureNum, double _Gamma, double _C, boolean updateImage,
   currGamma = _Gamma;
   nr_fold = _nr_fold;
   svmBuffer = new PGraphics(); 
-  svm.svm_set_print_string_function(new libsvm.svm_print_interface() {
-    @Override public void print(String s) {
-    }
-  }
-  );
+  //if (!bAndroid) {
+  //  svm.svm_set_print_string_function(new libsvm.svm_print_interface() {
+  //    @Override public void print(String s) {
+  //    }
+  //  }
+  //  );
+  //}
   kernel_Type = svm_parameter.RBF;
   trainTimer = millis();
   double cv_accuracy = runSVM_RBF(_Gamma, _C, updateImage, nr_fold);
@@ -211,7 +217,7 @@ double runSVM_Linear(double C, boolean updateImage, int _nr_fold) {
     param   = initSVM_Linear(C);
     problem = initSVMProblem(trainData, featureNum);
     model     = svm.svm_train(problem, param);
-    println("Data #: "+trainData.size(), "\nFeature #: "+trainData.get(0).dof, "\nClass #: "+svm.svm_get_nr_class(model));
+    println(trainData.size(), svm.svm_get_nr_class(model));
     nr_fold = _nr_fold;
     int[][] confMatrix = n_fold_cross_validation(problem, param, nr_fold, maxLabel+1);
     printConfusionMatrix(confMatrix, true);
@@ -244,7 +250,7 @@ double runSVM_RBF(double gamma, double cost, boolean updateImage, int _nr_fold) 
     param   = initSVM_RBF(gamma, cost);
     problem = initSVMProblem(trainData, featureNum);
     model     = svm.svm_train(problem, param);
-    println("Data #: "+trainData.size(), "\nFeature #: "+trainData.get(0).dof, "\nClass #: "+svm.svm_get_nr_class(model));
+    println(trainData.size(), svm.svm_get_nr_class(model));
     nr_fold = _nr_fold;
     int[][] confMatrix = n_fold_cross_validation(problem, param, nr_fold, maxLabel+1);
     //int[][] confMatrix = n_fold_cross_validation(problem, param, 5, svm.svm_get_nr_class(model));
