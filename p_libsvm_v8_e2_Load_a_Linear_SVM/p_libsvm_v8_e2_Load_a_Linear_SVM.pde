@@ -10,7 +10,6 @@
 // Output: Classifying the mouse position based on the model loaded.
 
 double C = 64;
-double gamma = 1.;
 int d = 2; //feature number
 
 void setup() {

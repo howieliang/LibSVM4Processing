@@ -7,10 +7,6 @@
 //*********************************************
 // A template for building an App involved support vector machine (SVM).
 
-double C = 64;
-double gamma = 1.;
-int d = 2; //feature number
-
 void setup() {
   size(500, 640);
 }

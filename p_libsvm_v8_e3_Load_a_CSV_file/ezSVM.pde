@@ -109,8 +109,8 @@ void trainRBFSVC(int _featureNum, double _Gamma, double _C, boolean updateImage,
   double cv_accuracy = runSVM_RBF(_Gamma, _C, updateImage, nr_fold);
   if (cv_accuracy > best_accuracy) { 
     best_accuracy = cv_accuracy;
-    C = _C;
-    gamma = _Gamma;
+    currC = _C;
+    currGamma = _Gamma;
   }
   svmTrained = true;
 }

@@ -10,7 +10,6 @@
 // Output: A Linear SVM model for classifying the mouse position
 
 double C = 64;
-double gamma = 1.;
 int d = 2; //feature number
 
 void setup() {

@@ -9,5 +9,5 @@ Confusion Matrix:
 [3]	0	11	17	575	603	
 Total	0	300	270	616	
 correct/tested = 1101/1186
-correct = 92.83305227655987 %
-time elapsed: 16.835 (s)
+overall accuracy = 92.83305227655987 %
+time elapsed: 17.877 (s)
