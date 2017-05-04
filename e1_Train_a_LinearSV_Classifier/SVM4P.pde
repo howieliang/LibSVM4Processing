@@ -2,7 +2,7 @@
 // LibSVM for Processing (v8)
 // Rong-Hao Liang: r.liang@tue.nl
 // The Example is based on the original LibSVM library
-// Please place the ezSVM.pde in [the same directory] with your Processing sketch.
+// Please place the SVM4P.pde in [the same directory] with your Processing sketch.
 // Please also place the libsvm.jar in [the same directory]/code/.
 // LibSVM original Website: http://www.csie.ntu.edu.tw/~cjlin/libsvm/
 //*********************************************

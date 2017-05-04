@@ -1,26 +1,30 @@
 //*********************************************
-// LibSVM for Processing (v8)
-// Example 1. Train a Linear SVM
+// LibSVM for Processing (SVM4P)
+// Example 2. Load a Linear SVM
 // Rong-Hao Liang: r.liang@tue.nl
 // The Example is based on the original LibSVM library
 // LibSVM Website: http://www.csie.ntu.edu.tw/~cjlin/libsvm/
 //*********************************************
 // A toy example that demonstrates the capability of multi-class classification on a 2D SVM.
-// Input: Labelled data formed by Click and Drag the mouse cursor on the canvas.
-// Output: A Linear SVM model for classifying the mouse position
+// Input: A SVM model.
+// Output: Classifying the mouse position based on the model loaded.
 
 double C = 64;
 int d = 2; //feature number
 
 void setup() {
   size(500, 640);
+  model = loadSVM_Model(sketchPath()+"/data/test.model");
+  svmBuffer = getModelImage(svmBuffer, model, (double)width, (double)height);
+  svmTrained = true;
+  firstTrained = false;
 }
 
 void draw() {
   background(255);
   if (!svmTrained && firstTrained) {
     //train a linear support vector classifier (SVC) 
-    trainLinearSVC(d,C);
+    trainLinearSVC(d, C);
   }
   //draw the SVM
   if (d == 2) drawSVM();
@@ -62,7 +66,6 @@ void drawInfo(int x, int y) {
   text(trainingInfo, x, y);
   popStyle();
 }
-
 
 void mouseWheel(MouseEvent event) {
   noise += event.getCount();

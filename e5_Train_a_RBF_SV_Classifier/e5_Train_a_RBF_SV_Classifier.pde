@@ -1,30 +1,27 @@
 //*********************************************
-// LibSVM for Processing (v8)
-// Example 2. Load a Linear SVM
+// LibSVM for Processing (SVM4P)
+// Example 5. Train a RBF SVM
 // Rong-Hao Liang: r.liang@tue.nl
 // The Example is based on the original LibSVM library
 // LibSVM Website: http://www.csie.ntu.edu.tw/~cjlin/libsvm/
 //*********************************************
 // A toy example that demonstrates the capability of multi-class classification on a 2D SVM.
-// Input: A SVM model.
-// Output: Classifying the mouse position based on the model loaded.
+// Input: Labelled data formed by Click and Drag the mouse cursor on the canvas.
+// Output: A RBF-Kernel SVM model for classifying the mouse position
 
 double C = 64;
+double gamma = 1.;
 int d = 2; //feature number
 
 void setup() {
   size(500, 640);
-  model = loadSVM_Model(sketchPath()+"/data/test.model");
-  svmBuffer = getModelImage(svmBuffer, model, (double)width, (double)height);
-  svmTrained = true;
-  firstTrained = false;
 }
 
 void draw() {
   background(255);
   if (!svmTrained && firstTrained) {
-    //train a linear support vector classifier (SVC) 
-    trainLinearSVC(d, C);
+    //train a linear support vector classifier (SVC)
+    trainRBFSVC(d, gamma, C);
   }
   //draw the SVM
   if (d == 2) drawSVM();
@@ -42,30 +39,33 @@ void draw() {
 
 void drawInfo(int x, int y) {
   String manual = "\n- Press [ENTER] to Train the SVM"+
-    "\n- Press N=[0-9] to Train an Linear SV Classifier with C=2^N"+
+    "\n- Press N=[1-5] to Train an RBF SVM with C=4^N"+
+    "\n- Press N=[6-9] to Train an RBF SVM with Gamma=4^(N-9)"+
+    "\n- Press N=[0] to Train a Linear SVM with C=1024"+
     "\n- Press [TAB] to change label color"+
     "\n- Press [/] to clear data"+
-    "\n- Press [S] to save model"+
-    "\n- Scroll mouse to adjust noise";
+    "\n- Press [S] to save model";
   if (firstTrained) {
-    trainingInfo = "Linear-Kernel SVM, C = "+ nf ((float)C, 1, 0) +", In-sample Accuracy = "  + nf ((float)best_accuracy*100, 1, 2) + "%"+ manual;
+    trainingInfo = "RBF-Kernel SVM, C = "+ nf ((float)C, 1, 0) +", Gamma = "+ nf ((float)gamma, 1, 3) +", In-sample Accuracy = "  + nf ((float)best_accuracy*100, 1, 2) + "%"+ manual;
   } else {
-    trainingInfo = "Linear-Kernel SVM, C = "+ nf ((float)C, 1, 0) + manual;
+    trainingInfo = "RBF-Kernel SVM, C = "+ nf ((float)C, 1, 0) +", Gamma = "+ nf ((float)gamma, 1, 3) + manual;
   }
   pushStyle();
-
   stroke(0);
   noFill();
   rectMode(CENTER);
   rect(width/2, width/2, width-1, width-1);
   fill(255);
   rect(width/2, height-(height-width)/2, width-1, (height-width-1));
+  stroke(0);
+  fill(255, 52);
   noStroke();
   fill(0);
   textSize(12);
   text(trainingInfo, x, y);
   popStyle();
 }
+
 
 void mouseWheel(MouseEvent event) {
   noise += event.getCount();

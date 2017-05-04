@@ -1,5 +1,5 @@
 //*********************************************
-// LibSVM for Processing (v8)
+// LibSVM for Processing (SVM4P)
 // Example 0. Build Your App
 // Rong-Hao Liang: r.liang@tue.nl
 // The Example is based on the original LibSVM library
