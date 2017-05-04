@@ -29,6 +29,9 @@ String trainingInfo = "";
 boolean svmTrained = false;
 boolean firstTrained = false;
 
+long trainTimer = millis();
+long testTimer = millis();
+
 color colors[] = {
   color(155, 89, 182), color(63, 195, 128), color(214, 69, 65), 
   color(82, 179, 217), color(244, 208, 63), color(242, 121, 53), 
@@ -36,6 +39,10 @@ color colors[] = {
   color(128, 52, 0), color(52, 128, 0), color(128, 52, 0)
 };
 double noise = 50;
+double currC = 64;
+double currGamma = 1.;
+
+int nr_fold = 5;
 
 PrintWriter output;
 
@@ -53,12 +60,17 @@ void trainLinearSVR(int _featureNum, double C) {
 }
 
 void trainLinearSVC(int _featureNum, double _C) {
-  
   trainLinearSVC(_featureNum, _C, true);
 }
 
-void trainLinearSVC(int _featureNum, double C, boolean updateImage) {
+void trainLinearSVC(int _featureNum, double _C, boolean updateImage) {
+  trainLinearSVC(_featureNum, _C, updateImage, nr_fold);
+}
+
+void trainLinearSVC(int _featureNum, double _C, boolean updateImage, int _nr_fold) {
   featureNum = _featureNum;
+  currC = _C;
+  nr_fold = _nr_fold;
   svmBuffer = new PGraphics(); 
   svm.svm_set_print_string_function(new libsvm.svm_print_interface() {
     @Override public void print(String s) {
@@ -66,7 +78,8 @@ void trainLinearSVC(int _featureNum, double C, boolean updateImage) {
   }
   );
   kernel_Type = svm_parameter.LINEAR;
-  best_accuracy = runSVM_Linear(C, updateImage); //Run Linear SVM and get the cross-validation accuracy
+  trainTimer = millis();
+  best_accuracy = runSVM_Linear(_C, updateImage, nr_fold); //Run Linear SVM and get the cross-validation accuracy
   svmTrained = true;
 }
 
@@ -75,7 +88,14 @@ void trainRBFSVC(int _featureNum, double _Gamma, double _C) {
 }
 
 void trainRBFSVC(int _featureNum, double _Gamma, double _C, boolean updateImage) {
+  trainRBFSVC(_featureNum, _Gamma, _C, true, nr_fold);
+}
+
+void trainRBFSVC(int _featureNum, double _Gamma, double _C, boolean updateImage, int _nr_fold) {
   featureNum = _featureNum;
+  currC = _C;
+  currGamma = _Gamma;
+  nr_fold = _nr_fold;
   svmBuffer = new PGraphics(); 
   svm.svm_set_print_string_function(new libsvm.svm_print_interface() {
     @Override public void print(String s) {
@@ -83,7 +103,8 @@ void trainRBFSVC(int _featureNum, double _Gamma, double _C, boolean updateImage)
   }
   );
   kernel_Type = svm_parameter.RBF;
-  double cv_accuracy = runSVM_RBF(_Gamma, _C, updateImage);
+  trainTimer = millis();
+  double cv_accuracy = runSVM_RBF(_Gamma, _C, updateImage, nr_fold);
   if (cv_accuracy > best_accuracy) { 
     best_accuracy = cv_accuracy;
     C = _C;
@@ -178,15 +199,20 @@ double runSVM_Linear(double _C) {
   return runSVM_Linear(_C, true);
 }
 
-double runSVM_Linear(double C, boolean updateImage) {
+double runSVM_Linear(double _C, boolean updateImage) {
+  return runSVM_Linear(_C, updateImage, nr_fold);
+}
+
+double runSVM_Linear(double C, boolean updateImage, int _nr_fold) {
   if (trainData.size() > 0) {
     println("SVM (Linear kernel)\nTraining...");
     param   = initSVM_Linear(C);
     problem = initSVMProblem(trainData, featureNum);
     model     = svm.svm_train(problem, param);
     println(trainData.size(), svm.svm_get_nr_class(model));
-    int[][] confMatrix = n_fold_cross_validation(problem, param, 5, maxLabel+1);
-    printConfusionMatrix(confMatrix);
+    nr_fold = _nr_fold;
+    int[][] confMatrix = n_fold_cross_validation(problem, param, nr_fold, maxLabel+1);
+    printConfusionMatrix(confMatrix, true);
     double accuracy = evaluateAccuracy(confMatrix);
     println("Done.\nPrediction Accuracy = "+(accuracy *100.)+"%");
     if (accuracy>=best_accuracy && updateImage && featureNum==2)svmBuffer = getModelImage(svmBuffer, model, (double)width, (double)height);
@@ -207,15 +233,20 @@ double runSVM_RBF(double gamma, double cost) {
 }
 
 double runSVM_RBF(double gamma, double cost, boolean updateImage) {
+  return runSVM_RBF(gamma, cost, updateImage, nr_fold);
+}
+
+double runSVM_RBF(double gamma, double cost, boolean updateImage, int _nr_fold) {
   if (trainData.size() > 0) {
     println("SVM (RBF kernel): gamma=", gamma, "cost=", cost, "\nTraining...");
     param   = initSVM_RBF(gamma, cost);
     problem = initSVMProblem(trainData, featureNum);
     model     = svm.svm_train(problem, param);
     println(trainData.size(), svm.svm_get_nr_class(model));
-    int[][] confMatrix = n_fold_cross_validation(problem, param, 5, maxLabel+1);
+    nr_fold = _nr_fold;
+    int[][] confMatrix = n_fold_cross_validation(problem, param, nr_fold, maxLabel+1);
     //int[][] confMatrix = n_fold_cross_validation(problem, param, 5, svm.svm_get_nr_class(model));
-    printConfusionMatrix(confMatrix);
+    printConfusionMatrix(confMatrix, true);
     double accuracy = evaluateAccuracy(confMatrix);
     if (accuracy>=best_accuracy && updateImage && featureNum==2) svmBuffer = getModelImage(svmBuffer, model, (double)width, (double)height);
     println("Done.\nPrediction Accuracy = "+(accuracy *100.)+"%");
@@ -253,12 +284,26 @@ int[][] n_fold_cross_validation(svm_problem problem, svm_parameter param, int n_
 //: Print confusion matrix in console
 //****
 
-void printConfusionMatrix (int[][] confMatrix) {
-  output = createWriter("confMatrix.txt"); 
+void printConfusionMatrix (int[][] confMatrix, boolean train) {
   int tested = 0;
   int correct = 0;
   int totalR = 0;
   int totalC = 0;
+  double duration = (double)(millis()-trainTimer)/1000.;
+  if (train) output = createWriter("train_confMatrix.txt");
+  else output = createWriter("test_confMatrix.txt");
+  if (kernel_Type == svm_parameter.RBF) {
+    output.println("RBF-Kernel SVM");
+    output.println("Feature #:"+featureNum);
+    output.println("Gamma:"+currGamma);
+    output.println("C:"+currC);
+  }
+  if (kernel_Type == svm_parameter.LINEAR) {
+    output.println("Linear-Kernel SVM");
+    output.println("Feature #:"+featureNum);
+    output.println("C:"+currC);
+  }
+  if (train) output.println(nr_fold+"-Fold Cross Validation");
   output.println("Confusion Matrix:");
   output.print("\t");
   for (int j = 0; j < confMatrix[0].length; j++) {
@@ -288,7 +333,8 @@ void printConfusionMatrix (int[][] confMatrix) {
   }
   output.print("\n");
   output.println("correct/tested = "+ correct + "/" + tested);
-  output.println("correct = "+((double)correct/(double)tested * 100.) + " %");
+  output.println("overall accuracy = "+((double)correct/(double)tested * 100.) + " %");
+  output.println("time elapsed: "+duration+" (s)");
   output.flush();
   output.close();
 }
@@ -420,17 +466,24 @@ svm_model loadSVM_Model(String path) {
 //: Get the accuracy of the SVM based on the given dataset.
 //****
 
-double evaluateTestSet(ArrayList<Data> dataList, svm_model model) {
-  double correctPredictions = 0;
+double evaluateTestSet(ArrayList<Data> dataList) {
+  int[][] confMatrix = new int[type][type];
+  for (int r = 0; r < type; r++) {
+    for (int c = 0; c < type; c++) {
+      confMatrix[r][c] = 0;
+    }
+  }
   for (int i=0; i<dataList.size(); i++) {
     Data p = dataList.get(i);
     int dataLabel = p.label;
     svm_node[] x = new svm_node[p.features.length-1];
     for (int j=0; j < p.features.length-1; j++) x[j] = initSVM_Node(j, p.features[j]);
     int predictLabel = (int) svm.svm_predict(model, x);
-    if (predictLabel == dataLabel) correctPredictions++;
+    ++confMatrix[dataLabel][predictLabel];
   }
-  return correctPredictions/(double)dataList.size();
+  printConfusionMatrix(confMatrix, false);
+  double accuracy = evaluateAccuracy(confMatrix);
+  return accuracy;
 }
 
 //****

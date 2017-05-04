@@ -1,0 +1,13 @@
+Linear-Kernel SVM
+Feature #:180
+C:64.0
+Confusion Matrix:
+	[0]	[1]	[2]	[3]	Total	
+[0]	0	0	0	0	0	
+[1]	0	278	5	20	303	
+[2]	0	11	248	21	280	
+[3]	0	11	17	575	603	
+Total	0	300	270	616	
+correct/tested = 1101/1186
+correct = 92.83305227655987 %
+time elapsed: 16.835 (s)

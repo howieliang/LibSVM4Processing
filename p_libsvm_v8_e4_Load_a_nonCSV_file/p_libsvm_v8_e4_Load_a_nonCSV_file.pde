@@ -18,9 +18,9 @@ void setup() {
   
   //load a non-CSV file for training and classification
   //trainData = loadData("out.txt", 2); 
-  //trainData = loadData("dna.scale", 180); // 2000 3
+  trainData = loadData("dna.scale", 180); // 2000 3
   //load and scale a non-CSV file for training and classification
-  trainData = loadDataScaled("pendigits100",16,100); //7494 10
+  //trainData = loadDataScaled("pendigits100",16,100); //7494 10
 
   //Other examples
   //trainData = loadData("satimage.scale",36); //4435 6
@@ -28,9 +28,9 @@ void setup() {
 
   //Use the trained SVM to test
   //testData = loadData("out.txt", 2); // 2000 3
-  //testData = loadData("dna.scale.t", 180);
+  testData = loadData("dna.scale.t", 180);
   //testData = loadData("satimage.scale.t",36); //4435 6
-  testData = loadDataScaled("pendigits100.t",16,100); //7494 10
+  //testData = loadDataScaled("pendigits100",16,100); //7494 10
   //testData = loadData("letter.scale.t", 16); //15000 26
   
 
@@ -48,7 +48,7 @@ void draw() {
     println("[Training]");
     trainLinearSVC(d, C);
     println("[Testing]");
-    outOfSample_accuracy = evaluateTestSet(testData, model);
+    outOfSample_accuracy = evaluateTestSet(testData);
     println("[Done]: Out-of-Sample Accuracy = "+nf ((float)outOfSample_accuracy*100, 1, 2)+"%");
   }
 }
