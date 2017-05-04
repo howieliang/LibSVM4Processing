@@ -49,9 +49,9 @@ void drawInfo(int x, int y) {
     "\n- Press [S] to save model"+
     "\n- Scroll mouse to adjust noise";
   if (firstTrained) {
-    trainingInfo = "RBF-Kernel SVM, C = "+ nf ((float)C, 1, 0) +", Gamma = "+ nf ((float)gamma, 1, 3) +", In-sample Accuracy = "  + nf ((float)best_accuracy*100, 1, 2) + "%"+ manual;
+    trainingInfo = "Linear-Kernel SVM, C = "+ nf ((float)C, 1, 0) +", In-sample Accuracy = "  + nf ((float)best_accuracy*100, 1, 2) + "%"+ manual;
   } else {
-    trainingInfo = "RBF-Kernel SVM, C = "+ nf ((float)C, 1, 0) +", Gamma = "+ nf ((float)gamma, 1, 3) + manual;
+    trainingInfo = "Linear-Kernel SVM, C = "+ nf ((float)C, 1, 0) + manual;
   }
   pushStyle();
 
