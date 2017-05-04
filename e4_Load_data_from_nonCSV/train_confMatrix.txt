@@ -5,10 +5,10 @@ C:64.0
 Confusion Matrix:
 	[0]	[1]	[2]	[3]	Total	
 [0]	0	0	0	0	0	
-[1]	0	421	26	17	464	
-[2]	0	26	433	26	485	
-[3]	0	29	42	980	1051	
-Total	0	476	501	1023	
-correct/tested = 1834/2000
-overall accuracy = 91.7 %
-time elapsed: 17.25 (s)
+[1]	0	418	28	18	464	
+[2]	0	21	434	30	485	
+[3]	0	29	31	991	1051	
+Total	0	468	493	1039	
+correct/tested = 1843/2000
+overall accuracy = 92.15 %
+time elapsed: 16.589 (s)

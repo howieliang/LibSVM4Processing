@@ -10,8 +10,9 @@
 // Output: A RBF-Kernel SVM model for classifying the mouse position
 
 double C = 64;
-double gamma = 1.;
+double gamma = 1.; //additional parameter for RBF SVM
 int d = 2; //feature number
+boolean isRBF = true;
 
 void setup() {
   size(500, 640);
@@ -20,8 +21,9 @@ void setup() {
 void draw() {
   background(255);
   if (!svmTrained && firstTrained) {
-    //train a linear support vector classifier (SVC)
-    trainRBFSVC(d, gamma, C);
+    //train a RBF support vector classifier (SVC)
+    if(isRBF) trainRBFSVC(d, gamma, C);
+    else trainLinearSVC(d, C);
   }
   //draw the SVM
   if (d == 2) drawSVM();
@@ -94,8 +96,23 @@ void keyPressed() {
       println("Error: No Data");
     }
   }
-  if (key >= '0' && key <= '9') {
-    C = pow(2, key - '0');
+  if (key == '0') {
+    isRBF = false;
+    C = 64;
+    if (!firstTrained) firstTrained = true;
+    resetSVM();
+  }
+  if (key >= '1' && key <= '5') {
+    isRBF = true;
+    C = pow(2, (key - '0')*2);
+    gamma = 1;
+    if (!firstTrained) firstTrained = true;
+    resetSVM();
+  }
+  if (key >= '6' && key <= '9') {
+    isRBF = true;
+    C = 64;
+    gamma = pow(2, (key - '9')*2);
     if (!firstTrained) firstTrained = true;
     resetSVM();
   }

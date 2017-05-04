@@ -12,6 +12,8 @@
 double C = 64;
 int d = 2; //feature number
 
+String info = "[Training]";
+
 void setup() {
   size(500, 640);
   
@@ -32,7 +34,6 @@ void setup() {
   //testData = loadDataScaled("pendigits100",16,100); //7494 10
   //testData = loadData("letter.scale.t", 16); //15000 26
   
-
   if (trainData.size()>0) {
     d = trainData.get(0).dof;
   }
@@ -42,12 +43,13 @@ void setup() {
 
 void draw() {
   background(255);
+  fill(52);
+  text(info, 10, 20);
   if (!svmTrained && firstTrained) {
-    //train a linear SVM with a given cost
-    println("[Training]");
     trainLinearSVC(d, C);
-    println("[Testing]");
+    info+="\nData #: "+trainData.size() + "\nFeature #: "+trainData.get(0).dof + "\nClass #: "+svm.svm_get_nr_class(model);
+    info+="\nDone.\n[In-Sample Accuracy:] "+nf ((float)best_accuracy*100, 1, 2)+"%\n[Testing]";
     outOfSample_accuracy = evaluateTestSet(testData);
-    println("[Done]: Out-of-Sample Accuracy = "+nf ((float)outOfSample_accuracy*100, 1, 2)+"%");
+    info+="\nDone.\n[Out-of-Sample Accuracy:] "+nf ((float)outOfSample_accuracy*100, 1, 2)+"%";
   }
 }

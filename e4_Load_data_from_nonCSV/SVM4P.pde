@@ -211,7 +211,7 @@ double runSVM_Linear(double C, boolean updateImage, int _nr_fold) {
     param   = initSVM_Linear(C);
     problem = initSVMProblem(trainData, featureNum);
     model     = svm.svm_train(problem, param);
-    println(trainData.size(), svm.svm_get_nr_class(model));
+    println("Data #: "+trainData.size(), "\nFeature #: "+trainData.get(0).dof, "\nClass #: "+svm.svm_get_nr_class(model));
     nr_fold = _nr_fold;
     int[][] confMatrix = n_fold_cross_validation(problem, param, nr_fold, maxLabel+1);
     printConfusionMatrix(confMatrix, true);
@@ -244,7 +244,7 @@ double runSVM_RBF(double gamma, double cost, boolean updateImage, int _nr_fold) 
     param   = initSVM_RBF(gamma, cost);
     problem = initSVMProblem(trainData, featureNum);
     model     = svm.svm_train(problem, param);
-    println(trainData.size(), svm.svm_get_nr_class(model));
+    println("Data #: "+trainData.size(), "\nFeature #: "+trainData.get(0).dof, "\nClass #: "+svm.svm_get_nr_class(model));
     nr_fold = _nr_fold;
     int[][] confMatrix = n_fold_cross_validation(problem, param, nr_fold, maxLabel+1);
     //int[][] confMatrix = n_fold_cross_validation(problem, param, 5, svm.svm_get_nr_class(model));
