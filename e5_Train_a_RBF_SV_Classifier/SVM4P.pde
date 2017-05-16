@@ -301,24 +301,24 @@ void printConfusionMatrix (int[][] confMatrix, boolean train) {
   if (train) output = createWriter("train_confMatrix.txt");
   else output = createWriter("test_confMatrix.txt");
   if (kernel_Type == svm_parameter.RBF) {
-    output.println("RBF-Kernel SVM");
-    output.println("Feature #:"+featureNum);
-    output.println("Gamma:"+currGamma);
-    output.println("C:"+currC);
+    output.print("RBF-Kernel SVM");
+    output.print("\r\nFeature #:"+featureNum);
+    output.print("\r\nGamma:"+currGamma);
+    output.print("\r\nC:"+currC);
   }
   if (kernel_Type == svm_parameter.LINEAR) {
-    output.println("Linear-Kernel SVM");
-    output.println("Feature #:"+featureNum);
-    output.println("C:"+currC);
+    output.print("Linear-Kernel SVM");
+    output.print("\r\nFeature #:"+featureNum);
+    output.print("\r\nC:"+currC);
   }
-  if (train) output.println(nr_fold+"-Fold Cross Validation");
-  output.println("Confusion Matrix:");
-  output.print("\t");
+  if (train) output.println("\r\n"+nr_fold+"-Fold Cross Validation");
+  output.print("\r\nConfusion Matrix:");
+  output.print("\r\n\t");
   for (int j = 0; j < confMatrix[0].length; j++) {
     output.print("["+j+"]\t");
   }
   output.print("Total\t");
-  output.print("\n");
+  output.print("\r\n");
   for (int i = 0; i < confMatrix.length; i++) {
     output.print("["+i+"]\t");
     totalR = 0;
@@ -329,7 +329,7 @@ void printConfusionMatrix (int[][] confMatrix, boolean train) {
       totalR+=confMatrix[i][j];
     }
     output.print(totalR+"\t");
-    output.print("\n");
+    output.print("\r\n");
   }
   output.print("Total\t");
   for (int j = 0; j < confMatrix[0].length; j++) {
@@ -339,7 +339,7 @@ void printConfusionMatrix (int[][] confMatrix, boolean train) {
     }
     output.print(totalC+"\t");
   }
-  output.print("\n");
+  output.print("\r\n");
   output.println("correct/tested = "+ correct + "/" + tested);
   output.println("overall accuracy = "+((double)correct/(double)tested * 100.) + " %");
   output.println("time elapsed: "+duration+" (s)");
