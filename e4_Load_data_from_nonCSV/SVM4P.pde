@@ -126,6 +126,7 @@ void resetSVM() {
   best_accuracy = 0.;
   outOfSample_accuracy = 0.;
   maxLabel = type;
+  tCnt=0;
 }
 
 svm_node[] svmNode(double[] d) {
@@ -146,6 +147,7 @@ double svmPredict(svm_node[] x) {
 }
 
 void clearSVM() {
+  tCnt=0;
   type = 0;
   trainData.clear();
   testData.clear();
