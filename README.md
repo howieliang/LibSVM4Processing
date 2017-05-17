@@ -34,6 +34,10 @@ Output: An RBF-Kernel SVM model for classifying the mouse position.
 Input: Labelled data formed by Click and Drag the mouse cursor on the canvas.
 Output: A Linear- or RBF-Kernel SVM model with the best parameters in grid search.
 
+- Example 7. Sensor Data Classification
+Input: Labelled sensor data received from an Arduino via the Serial port.
+Output: A Linear SVM model for classifying the sensor data.
+
 Tools for generating CSV file is also provided
 - CSV generator
 Input: Labelled data formed by Click and Drag the mouse cursor on the canvas.
