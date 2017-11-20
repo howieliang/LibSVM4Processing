@@ -48,16 +48,18 @@ int nr_fold = 5;
 
 PrintWriter output;
 
+boolean bAndroid = false;
+
 void trainLinearSVR(int _featureNum, double C) {
   featureNum = _featureNum;
   svmBuffer = new PGraphics(); 
-  //if (!bAndroid) {
-  //  svm.svm_set_print_string_function(new libsvm.svm_print_interface() {
-  //    @Override public void print(String s) {
-  //    }
-  //  }
-  //  );
-  //}
+  if (!bAndroid) {
+    svm.svm_set_print_string_function(new libsvm.svm_print_interface() {
+      @Override public void print(String s) {
+      }
+    }
+    );
+  }
   kernel_Type = svm_parameter.LINEAR;
   best_accuracy = runSVR_Linear(C); //Run Linear SVM and get the cross-validation accuracy;
   svmTrained = true;
@@ -76,13 +78,13 @@ void trainLinearSVC(int _featureNum, double _C, boolean updateImage, int _nr_fol
   currC = _C;
   nr_fold = _nr_fold;
   svmBuffer = new PGraphics(); 
-  //if (!bAndroid) {
-  //  svm.svm_set_print_string_function(new libsvm.svm_print_interface() {
-  //    @Override public void print(String s) {
-  //    }
-  //  }
-  //  );
-  //}
+  if (!bAndroid) {
+    svm.svm_set_print_string_function(new libsvm.svm_print_interface() {
+      @Override public void print(String s) {
+      }
+    }
+    );
+  }
   kernel_Type = svm_parameter.LINEAR;
   trainTimer = millis();
   best_accuracy = runSVM_Linear(_C, updateImage, nr_fold); //Run Linear SVM and get the cross-validation accuracy
@@ -103,13 +105,13 @@ void trainRBFSVC(int _featureNum, double _Gamma, double _C, boolean updateImage,
   currGamma = _Gamma;
   nr_fold = _nr_fold;
   svmBuffer = new PGraphics(); 
-  //if (!bAndroid) {
-  //  svm.svm_set_print_string_function(new libsvm.svm_print_interface() {
-  //    @Override public void print(String s) {
-  //    }
-  //  }
-  //  );
-  //}
+  if (!bAndroid) {
+    svm.svm_set_print_string_function(new libsvm.svm_print_interface() {
+      @Override public void print(String s) {
+      }
+    }
+    );
+  }
   kernel_Type = svm_parameter.RBF;
   trainTimer = millis();
   double cv_accuracy = runSVM_RBF(_Gamma, _C, updateImage, nr_fold);
@@ -611,7 +613,7 @@ ArrayList<Data> loadDataScaled(String fileName, int feature_Num, double scale) {
   return d_list;
 }
 
-ArrayList<Data> loadCSV(String fileName) {
+ArrayList<Data> loadCSV(String fileName, float scale) {
   ArrayList<Data> arrayList = new ArrayList<Data>();
   Table data = loadTable(fileName);
   ArrayList<Double> labelList = new ArrayList<Double>();
@@ -624,7 +626,7 @@ ArrayList<Data> loadCSV(String fileName) {
       TableRow row = data.getRow(i);
       double[] p = new double[data.getColumnCount()];
       for(int j = 0 ; j < featureNum ; j++){
-        p[j] = row.getDouble(j)/500.;
+        p[j] = row.getDouble(j)*scale;
       }
       double oldlabel = row.getDouble(labelCol); 
       double newLabel = -1;

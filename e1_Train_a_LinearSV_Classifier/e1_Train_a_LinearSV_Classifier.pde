@@ -63,7 +63,6 @@ void drawInfo(int x, int y) {
   popStyle();
 }
 
-
 void mouseWheel(MouseEvent event) {
   noise += event.getCount();
   if (noise > width) noise = width;

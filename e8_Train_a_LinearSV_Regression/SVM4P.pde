@@ -184,6 +184,7 @@ double runSVR_Linear(double C) {
     problem = initSVMProblem(trainData, featureNum);
     model     = svm.svm_train(problem, param);
     println(trainData.size(), svm.svm_get_nr_class(model));
+    println("Done.");
     //int[][] confMatrix = n_fold_cross_validation(problem, param, 5, maxLabel+1);
     //printConfusionMatrix(confMatrix);
     //double accuracy = evaluateAccuracy(confMatrix);
@@ -683,7 +684,7 @@ void drawPrediction(double predictLabel, svm_node[] testNode) {
   stroke(255);
   ellipse(sampleX, sampleY, 20, 20);
   fill(0);
-  text(predictLabel+"", sampleX, sampleY+4);
+  text(nf((float)predictLabel,0,2), sampleX, sampleY+4);
   popStyle();
 }
 

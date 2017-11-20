@@ -1,31 +1,26 @@
 //*********************************************
 // LibSVM for Processing (SVM4P)
-// Example 3. Load a CSV file
+// Example 1. Train a Linear SVM
 // Rong-Hao Liang: r.liang@tue.nl
 // The Example is based on the original LibSVM library
 // LibSVM Website: http://www.csie.ntu.edu.tw/~cjlin/libsvm/
 //*********************************************
 // A toy example that demonstrates the capability of multi-class classification on a 2D SVM.
-// Input: A Dataset in CSV file format
-// Output: A model for classifying the mouse position based on the model loaded.
+// Input: Labelled data formed by Click and Drag the mouse cursor on the canvas.
+// Output: A Linear SVM model for classifying the mouse position
 
 double C = 64;
 int d = 2; //feature number
 
 void setup() {
   size(500, 640);
-  
-  //load CSV file for training and classifying
-  trainData = loadCSV("sample.csv", 1./(float)width);
-  svmTrained = false;
-  firstTrained = false;
 }
 
 void draw() {
   background(255);
   if (!svmTrained && firstTrained) {
-    //train a linear support vector classifier (SVC) 
-    trainLinearSVC(d, C);
+    //train a linear support vector classifier (SVR) 
+    trainLinearSVR(d,C);
   }
   //draw the SVM
   if (d == 2) drawSVM();
@@ -33,7 +28,7 @@ void draw() {
   if (svmTrained) { 
     //form a test data
     double[] testData = {(double)mouseX/(double)width, (double)mouseY/(double)height};
-    int predict = (int) svmPredict(testData);
+    float predict = (float) svmPredict(testData);
     drawPrediction(predict, testData);
   } else {
     drawCursor();
@@ -67,7 +62,6 @@ void drawInfo(int x, int y) {
   text(trainingInfo, x, y);
   popStyle();
 }
-
 
 void mouseWheel(MouseEvent event) {
   noise += event.getCount();
