@@ -615,14 +615,14 @@ ArrayList<Data> loadDataScaled(String fileName, int feature_Num, double scale) {
 
 ArrayList<Data> loadCSV(String fileName, float scale) {
   ArrayList<Data> arrayList = new ArrayList<Data>();
-  Table data = loadTable(fileName);
+  Table data = loadTable(fileName, "header");
   ArrayList<Double> labelList = new ArrayList<Double>();
   int labelCol = 0;
 
   if (data != null) {
     featureNum = data.getColumnCount()-1;
     labelCol = featureNum;
-    for (int i = 1; i < data.getRowCount(); i++) {
+    for (int i = 0; i < data.getRowCount()-1; i++) {
       TableRow row = data.getRow(i);
       double[] p = new double[data.getColumnCount()];
       for(int j = 0 ; j < featureNum ; j++){
