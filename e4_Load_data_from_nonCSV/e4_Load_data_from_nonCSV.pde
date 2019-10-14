@@ -47,9 +47,13 @@ void draw() {
   text(info, 10, 20);
   if (!svmTrained && firstTrained) {
     trainLinearSVC(d, C);
+    println("In-sample confusion matrix");
+    printTrainConfMatrix();
+    outOfSample_accuracy = evaluateTestSet(testData);
+    println("Out-of-sample confusion matrix");
+    printTestConfMatrix();
     info+="\nData #: "+trainData.size() + "\nFeature #: "+trainData.get(0).dof + "\nClass #: "+svm.svm_get_nr_class(model);
     info+="\nDone.\n[In-Sample Accuracy:] "+nf ((float)best_accuracy*100, 1, 2)+"%\n[Testing]";
-    outOfSample_accuracy = evaluateTestSet(testData);
     info+="\nDone.\n[Out-of-Sample Accuracy:] "+nf ((float)outOfSample_accuracy*100, 1, 2)+"%";
   }
 }

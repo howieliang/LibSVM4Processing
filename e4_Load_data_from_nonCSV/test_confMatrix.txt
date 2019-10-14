@@ -10,4 +10,4 @@ Confusion Matrix:
 Total	0	300	270	616	
 correct/tested = 1101/1186
 overall accuracy = 92.83305227655987 %
-time elapsed: 16.816 (s)
+time elapsed: 15.86 (s)

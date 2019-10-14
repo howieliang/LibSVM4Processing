@@ -1,20 +1,16 @@
-RBF-Kernel SVM
+Linear-Kernel SVM
 Feature #:2
-Gamma:1.0
-C:1024.0
+C:64.0
 5-Fold Cross Validation
+
 Confusion Matrix:
-	[0]	[1]	[2]	[3]	[4]	[5]	[6]	[7]	[8]	Total	
-[0]	36	0	1	0	0	0	0	0	0	37	
-[1]	0	96	0	0	0	0	0	0	0	96	
-[2]	0	0	97	0	0	0	0	0	0	97	
-[3]	0	0	0	69	0	0	0	0	0	69	
-[4]	0	1	0	0	106	0	0	0	0	107	
-[5]	0	0	0	0	0	82	0	0	0	82	
-[6]	0	0	0	0	0	0	55	0	0	55	
-[7]	0	0	0	0	0	0	0	17	0	17	
-[8]	0	0	0	0	0	0	0	0	5	5	
-Total	36	97	98	69	106	82	55	17	5	
-correct/tested = 563/565
-overall accuracy = 99.64601769911503 %
-time elapsed: 0.115 (s)
+	[0]	[1]	[2]	[3]	[4]	Total	
+[0]	67	2	0	0	0	69	
+[1]	2	29	6	2	0	39	
+[2]	0	3	40	0	3	46	
+[3]	1	1	0	13	0	15	
+[4]	0	0	2	0	20	22	
+Total	70	35	48	15	23	
+correct/tested = 169/191
+overall accuracy = 88.48167539267016 %
+time elapsed: 0.094 (s)

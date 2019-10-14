@@ -26,6 +26,8 @@ void draw() {
   if (!svmTrained && firstTrained) {
     //train a linear support vector classifier (SVC) 
     trainLinearSVC(d, C);
+    println("In-sample confusion matrix");
+    printTrainConfMatrix();
   }
   //draw the SVM
   if (d == 2) drawSVM();

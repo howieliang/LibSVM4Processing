@@ -21,6 +21,8 @@ void draw() {
   if (!svmTrained && firstTrained) {
     //train a linear support vector classifier (SVC) 
     trainLinearSVC(d,C);
+    println("Confusion Matrix: Training Set");
+    printTrainConfMatrix();
   }
   //draw the SVM
   if (d == 2) drawSVM();

@@ -24,6 +24,8 @@ void draw() {
     //train a RBF support vector classifier (SVC)
     if(isRBF) trainRBFSVC(d, gamma, C);
     else trainLinearSVC(d, C);
+    println("In-sample confusion matrix");
+    printTrainConfMatrix();
   }
   //draw the SVM
   if (d == 2) drawSVM();

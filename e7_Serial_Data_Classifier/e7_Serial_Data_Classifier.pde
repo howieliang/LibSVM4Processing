@@ -52,6 +52,8 @@ void draw() {
   if (!svmTrained && firstTrained) {
     //train a linear support vector classifier (SVC) 
     trainLinearSVC(d, C);
+    println("In-sample confusion matrix");
+    printTrainConfMatrix();
   }
 
   //Draw the sensor data

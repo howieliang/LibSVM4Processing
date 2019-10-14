@@ -21,6 +21,8 @@ svm_problem problem;
 svm_model model;
 double best_accuracy = 0.;
 double outOfSample_accuracy = 0.;
+int[][] trainConfMatrix;
+int[][] testConfMatrix;
 int imageSize = 500;
 
 //GUI Global Parameters 
@@ -223,9 +225,9 @@ double runSVM_Linear(double C, boolean updateImage, int _nr_fold) {
     model     = svm.svm_train(problem, param);
     println(trainData.size(), svm.svm_get_nr_class(model));
     nr_fold = _nr_fold;
-    int[][] confMatrix = n_fold_cross_validation(problem, param, nr_fold, maxLabel+1);
-    printConfusionMatrix(confMatrix, true);
-    double accuracy = evaluateAccuracy(confMatrix);
+    trainConfMatrix = n_fold_cross_validation(problem, param, nr_fold, maxLabel+1);
+    printConfusionMatrix(trainConfMatrix, true);
+    double accuracy = evaluateAccuracy(trainConfMatrix);
     println("Done.\nPrediction Accuracy = "+(accuracy *100.)+"%");
     if (accuracy>=best_accuracy && updateImage && featureNum==2)svmBuffer = getModelImage(svmBuffer, model, (double)width, (double)height);
     return accuracy;
@@ -256,10 +258,10 @@ double runSVM_RBF(double gamma, double cost, boolean updateImage, int _nr_fold) 
     model     = svm.svm_train(problem, param);
     println(trainData.size(), svm.svm_get_nr_class(model));
     nr_fold = _nr_fold;
-    int[][] confMatrix = n_fold_cross_validation(problem, param, nr_fold, maxLabel+1);
+    trainConfMatrix = n_fold_cross_validation(problem, param, nr_fold, maxLabel+1);
     //int[][] confMatrix = n_fold_cross_validation(problem, param, 5, svm.svm_get_nr_class(model));
-    printConfusionMatrix(confMatrix, true);
-    double accuracy = evaluateAccuracy(confMatrix);
+    printConfusionMatrix(trainConfMatrix, true);
+    double accuracy = evaluateAccuracy(trainConfMatrix);
     if (accuracy>=best_accuracy && updateImage && featureNum==2) svmBuffer = getModelImage(svmBuffer, model, (double)width, (double)height);
     println("Done.\nPrediction Accuracy = "+(accuracy *100.)+"%");
     //double accuracy = evaluateAccuracy(dataList, model);
@@ -279,16 +281,40 @@ double runSVM_RBF(double gamma, double cost, boolean updateImage, int _nr_fold) 
 //****
 
 int[][] n_fold_cross_validation(svm_problem problem, svm_parameter param, int n_fold, int type) {
-  int[][] confMatrix = new int[type][type];
+  trainConfMatrix = new int[type][type];
   double[] target = new double[problem.l];
   svm.svm_cross_validation(problem, param, n_fold, target);
 
   for (int i = 0; i < target.length; i++) {
     int r = (int)problem.y[i];
     int c = (int)target[i];
-    ++confMatrix[r][c];
+    ++trainConfMatrix[r][c];
   }
-  return confMatrix;
+  return trainConfMatrix;
+}
+
+void printTrainConfMatrix() {
+  if (svmTrained && (trainConfMatrix!=null)) {
+    for (int i = 0; i < trainConfMatrix.length; i++) {
+      for (int j = 0; j < trainConfMatrix[0].length; j++) {
+        print(trainConfMatrix[i][j]);
+        print('\t');
+      }
+      print('\n');
+    }
+  }
+}
+
+void printTestConfMatrix() {
+  if (svmTrained && (testConfMatrix!=null)) {
+    for (int i = 0; i < testConfMatrix.length; i++) {
+      for (int j = 0; j < testConfMatrix[0].length; j++) {
+        print(testConfMatrix[i][j]);
+        print('\t');
+      }
+      print('\n');
+    }
+  }
 }
 
 //****
@@ -479,10 +505,10 @@ svm_model loadSVM_Model(String path) {
 //****
 
 double evaluateTestSet(ArrayList<Data> dataList) {
-  int[][] confMatrix = new int[type][type];
+  testConfMatrix = new int[type][type];
   for (int r = 0; r < type; r++) {
     for (int c = 0; c < type; c++) {
-      confMatrix[r][c] = 0;
+      testConfMatrix[r][c] = 0;
     }
   }
   for (int i=0; i<dataList.size(); i++) {
@@ -491,10 +517,10 @@ double evaluateTestSet(ArrayList<Data> dataList) {
     svm_node[] x = new svm_node[p.features.length-1];
     for (int j=0; j < p.features.length-1; j++) x[j] = initSVM_Node(j, p.features[j]);
     int predictLabel = (int) svm.svm_predict(model, x);
-    ++confMatrix[dataLabel][predictLabel];
+    ++testConfMatrix[dataLabel][predictLabel];
   }
-  printConfusionMatrix(confMatrix, false);
-  double accuracy = evaluateAccuracy(confMatrix);
+  printConfusionMatrix(testConfMatrix, false);
+  double accuracy = evaluateAccuracy(testConfMatrix);
   return accuracy;
 }
 
@@ -625,7 +651,7 @@ ArrayList<Data> loadCSV(String fileName, float scale) {
     for (int i = 0; i < data.getRowCount()-1; i++) {
       TableRow row = data.getRow(i);
       double[] p = new double[data.getColumnCount()];
-      for(int j = 0 ; j < featureNum ; j++){
+      for (int j = 0; j < featureNum; j++) {
         p[j] = row.getDouble(j)*scale;
       }
       double oldlabel = row.getDouble(labelCol); 
